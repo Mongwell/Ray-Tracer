@@ -1,5 +1,5 @@
 EXENAME = main
-OBJS = imageOutput.o
+OBJS = imageOutput.o Ray.o
 IMAGES = gradient.ppm gradient.png
 
 CXX = clang++
@@ -17,9 +17,11 @@ $(EXENAME): $(OBJS)
 imageOutput.o : imageOutput.cpp
 	$(CXX) imageOutput.cpp $(CXXFLAGS)
 
+Ray.o : Ray.h Ray.cpp
+	$(CXX) Ray.cpp $(CXXFLAGS)
 
 clean :
 	rm -f *.o $(EXENAME) 
 
-imageClean :
+image-cleanup :
 	rm -f $(IMAGES)

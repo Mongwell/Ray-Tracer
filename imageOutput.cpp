@@ -2,6 +2,7 @@
 #include <fstream>
 #include <string>
 #include <png++/png.hpp>
+#include <glm/vec3.hpp>
 
 using namespace std;
 /*void writePPM(ofstream file) {*/
@@ -21,40 +22,21 @@ int main() {
     int ny = 100;
     file << "P3\n" << nx << " " << ny << "\n255\n";
 
+    png::image<png::rgb_pixel> image(200, 100);
+
     for (int j = 0; j < ny; ++j) {
         for (int i = 0; i < nx; ++i) {
-            float r = float(i) / float(nx);
-            float g = float(ny - j) / float(ny);
-            float b = 0.2;
+            glm::vec3 color(float(i) / float(nx), float(ny - j) / float(ny), 0.2);
 
-
-            int ir = int(255.99*r);
-            int ig = int(255.99*g);
-            int ib = int(255.99*b);
+            int ir = int(255.99*color[0]);
+            int ig = int(255.99*color[1]);
+            int ib = int(255.99*color[2]);
 
             file << ir << " " << ig << " " << ib << endl;
+            image[j][i] = png::rgb_pixel(ir, ig, ib);
         }
     }
     file.close();
-
-
-
-    png::image<png::rgb_pixel> image(200, 100);
-
-    for (png::uint_32 y = 0; y < image.get_height(); ++y) {
-        for(png::uint_32 x = 0; x < image.get_width(); ++x) {
-            float r = float(x) / float(image.get_width());
-            float g = float(image.get_height() - y) / float(image.get_height());
-            float b = 0.2;
-
-            int ir = int(255.99*r);
-            int ig = int(255.99*g);
-            int ib = int(255.99*b);
-
-            image[y][x] = png::rgb_pixel(ir, ig, ib);
-
-        }
-    }
     image.write("gradient.png");
 
 
