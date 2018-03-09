@@ -15,6 +15,6 @@ glm::vec3 Ray::direction() const {
     return direction_;
 }
 
-glm::vec3 Ray::point_at_parameter(float t) {
+glm::vec3 Ray::point_at_parameter(float t) const {
     return start_ + t * direction_;
 }

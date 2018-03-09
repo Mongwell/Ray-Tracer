@@ -21,26 +21,33 @@ using png::rgb_pixel;
 
 //}
 
-bool hit_sphere(const vec3& center, float radius, const Ray& r) {
+float hit_sphere(const vec3& center, float radius, const Ray& r) {
     vec3 oc = r.origin() - center;
     float a = dot(r.direction(), r.direction());
     float b = 2.0 * dot(oc, r.direction());
     float c = dot(oc, oc) - radius*radius;
 
     float discriminant = b * b - 4 * a * c;
-    
-    return discriminant > 0;
+
+    if (discriminant < 0) {
+        return -1.0;
+    }
+
+    return (-b - sqrt(discriminant)) / (2.0 * a);
 }
 
 vec3 color(const Ray& r) {
-    if (hit_sphere(vec3(0, 0, -1), 0.5, r))
-        return vec3(1, 0, 0);
+    vec3 center(0, 0, -1);
+    float t = hit_sphere(center, 0.5, r);
+    if (t > 0.0) {
+        vec3 N = normalize(r.point_at_parameter(t) - center);
+        return 0.5f * vec3(N[0] + 1, N[1] + 1, N[2] + 1);
+    }
 
     vec3 unit_direction = normalize(r.direction());
-    float t = 0.5 * (unit_direction[1] + 1.0);
-    
-    float scalar = 1.0 - t;
+    t = 0.5 * (unit_direction[1] + 1.0);
 
+    float scalar = 1.0 - t;
     //white blue blend
     return scalar * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
 }

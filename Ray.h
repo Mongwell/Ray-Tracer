@@ -30,7 +30,7 @@ class Ray {
          * @param t parameter
          * @return point on the ray
          */
-        glm::vec3 point_at_parameter(float t);
+        glm::vec3 point_at_parameter(float t) const;
 
     private:
         glm::vec3 start_;
