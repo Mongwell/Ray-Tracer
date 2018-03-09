@@ -1,7 +1,7 @@
 # Ray-Tracer
 ray tracer based on Peter Shirley's book "Ray Tracing in One Weekend"
 
-Libraries Used:
+Libraries Used (Dependencies):
     PNG++
     GLM
 
