@@ -6,6 +6,8 @@
 #include <glm/glm.hpp>
 #include <cfloat>
 #include "Sphere.h"
+#include "Triangle.h"
+#include "Quadrilateral.h"
 #include "Scene.h"
 #include "PrspcCamera.h"
 #include "OrthgCamera.h"
@@ -37,10 +39,20 @@ float unitRand() {
     return distribution(random);
 }
 
-vec3 color(const Ray& r, const Scene& world) {
+vec3 random_in_unit_sphere() {
+    vec3 p;
+    do {
+        p = 2.0f*vec3(unitRand(), unitRand(), unitRand()) - vec3(1, 1, 1);
+    } while (dot(p, p) >= 1.0);
+    return p;
+}
+
+vec3 color(const Ray& r, const Scene& world, int i = 0) {
     hit_record rec;
-    if (world.hit(r, 0.0, FLT_MAX, rec)) {
-        return 0.5f * vec3(rec.normal[0] + 1, rec.normal[1] + 1, rec.normal[2] + 1);
+    if (world.hit(r, 0.001, FLT_MAX, rec)) {
+        vec3 target = rec.p + rec.normal + random_in_unit_sphere();
+        vec3 direction = target - rec.p;
+        return 0.5f * color(Ray(rec.p, direction), world, i+1);
     }
 
     vec3 unit_direction = normalize(r.direction());
@@ -53,12 +65,12 @@ vec3 color(const Ray& r, const Scene& world) {
 
 int main() {
     
-    int nx = 200;
-    int ny = 100;
-    int ns = 100;
+    int nx = 600;
+    int ny = 300;
+    int ns = 1;
 
     //ofstream file;
-    string name = "sphere";
+    string name = "";
     //file.open(name + ".ppm", ios::out);
     image<rgb_pixel> prspcImage(nx, ny);
     image<rgb_pixel> orthgImage(nx, ny);
@@ -70,8 +82,10 @@ int main() {
     OrthgCamera oCam;
 
     Scene world;
-    world.scene.push_back(new Sphere(vec3(0, 0, -1), 0.5));
-    world.scene.push_back(new Sphere(vec3(0, -100.5, -1), 100));
+    world.scene.push_back(new Sphere(vec3(0, 0, -1), 0.2));
+    world.scene.push_back(new Sphere(vec3(0, -100.5, -2), 100));
+    world.scene.push_back(new Triangle(vec3(-1, 0, -1), vec3(-2, 0, -1), vec3(-1, 0.5, -1)));
+    world.scene.push_back(new Quadrilateral(vec3(0, 0, -1), vec3(-1, 0, -1), vec3(1, 0.2, -1), vec3(1, 0.3, -1)));
 
     unsigned count = 0;
     for (int j = ny - 1; j >= 0; --j) {
@@ -93,11 +107,13 @@ int main() {
             }
             
             pCol/= float(ns);
+            pCol = sqrt(pCol);
             int pir = int(255.99*pCol[0]);
             int pig = int(255.99*pCol[1]);
             int pib = int(255.99*pCol[2]);
 
             oCol/= float(ns);
+            oCol = sqrt(oCol);
             int oir = int(255.99*oCol[0]);
             int oig = int(255.99*oCol[1]);
             int oib = int(255.99*oCol[2]);
@@ -107,8 +123,8 @@ int main() {
         }
     }
     //file.close();
-    prspcImage.write(name + "-perspective.png");
-    orthgImage.write(name + "-orthgraphic.png");
+    prspcImage.write(name + "perspective.png");
+    orthgImage.write(name + "orthographic.png");
 
 
     return 0;
