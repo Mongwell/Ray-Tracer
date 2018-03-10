@@ -47,12 +47,12 @@ vec3 random_in_unit_sphere() {
     return p;
 }
 
-vec3 color(const Ray& r, const Scene& world, int i = 0) {
+vec3 color(const Ray& r, const Scene& world, unsigned depth = 0) {
     hit_record rec;
-    if (world.hit(r, 0.001, FLT_MAX, rec)) {
+    if (world.hit(r, 0.001, FLT_MAX, rec) && depth < 25) {
         vec3 target = rec.p + rec.normal + random_in_unit_sphere();
         vec3 direction = target - rec.p;
-        return 0.5f * color(Ray(rec.p, direction), world, i+1);
+        return 0.5f * color(Ray(rec.p, direction), world, depth+1);
     }
 
     vec3 unit_direction = normalize(r.direction());
@@ -65,9 +65,9 @@ vec3 color(const Ray& r, const Scene& world, int i = 0) {
 
 int main() {
     
-    int nx = 200;
-    int ny = 100;
-    int ns = 50;
+    int nx = 900;
+    int ny = 600;
+    int ns = 256;
 
     //ofstream file;
     string name = "";
@@ -82,7 +82,7 @@ int main() {
     OrthgCamera oCam;
 
     Scene world;
-    world.scene.push_back(new Sphere(vec3(0, 0, -1), 0.2));
+    world.scene.push_back(new Sphere(vec3(0, 0, -1), 0.4));
     world.scene.push_back(new Sphere(vec3(0, -100.5, -2), 100));
     world.scene.push_back(new Triangle(vec3(-1, 0, -1), vec3(-2, 0, -1), vec3(-1, 0.5, -1)));
     world.scene.push_back(new Quadrilateral(vec3(0, 0, -1), vec3(-1, 0, -1), vec3(1, 0.2, -1), vec3(1, 0.3, -1)));
@@ -91,7 +91,7 @@ int main() {
     for (int j = ny - 1; j >= 0; --j) {
         for (int i = 0; i < nx; ++i, ++count) {
             std::cout.precision(3);
-            std::cout << "\r" << 100 * float(count) / float(nx*ny) << "%\t" << "complete...   " << std::flush; 
+            std::cout << std::flush << "\r" << 100 * float(count) / float(nx*ny) << "%\t" << "complete...   " << std::flush; 
 
             vec3 pCol(0, 0, 0);
             vec3 oCol(0, 0, 0);
