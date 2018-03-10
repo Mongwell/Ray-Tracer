@@ -6,5 +6,7 @@ Libraries Used (Dependencies):
     GLM
 
 Resources:
+
     Ray Tracing in One Weekend - Peter Shirley
+    
     Möller-Trumbore triangle intersection algorithm
