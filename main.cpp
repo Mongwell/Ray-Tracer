@@ -7,7 +7,8 @@
 #include <cfloat>
 #include "Sphere.h"
 #include "Scene.h"
-#include "Camera.h"
+#include "PrspcCamera.h"
+#include "OrthgCamera.h"
 
 using std::random_device;
 using std::mt19937;
@@ -52,18 +53,22 @@ vec3 color(const Ray& r, const Scene& world) {
 
 int main() {
     
-    int nx = 1000;
-    int ny = 500;
+    int nx = 200;
+    int ny = 100;
     int ns = 100;
 
-    ofstream file;
+    //ofstream file;
     string name = "sphere";
-    file.open(name + ".ppm", ios::out);
-    image<rgb_pixel> image(nx, ny);
+    //file.open(name + ".ppm", ios::out);
+    image<rgb_pixel> prspcImage(nx, ny);
+    image<rgb_pixel> orthgImage(nx, ny);
+    
 
-    file << "P3\n" << nx << " " << ny << "\n255\n";
+    //file << "P3\n" << nx << " " << ny << "\n255\n";
 
-    Camera cam;
+    PrspcCamera pCam;
+    OrthgCamera oCam;
+
     Scene world;
     world.scene.push_back(new Sphere(vec3(0, 0, -1), 0.5));
     world.scene.push_back(new Sphere(vec3(0, -100.5, -1), 100));
@@ -71,29 +76,39 @@ int main() {
     unsigned count = 0;
     for (int j = ny - 1; j >= 0; --j) {
         for (int i = 0; i < nx; ++i, ++count) {
-            std::cout.precision(4);
+            std::cout.precision(3);
             std::cout << "\r" << 100 * float(count) / float(nx*ny) << "%\t" << "complete...   " << std::flush; 
 
-            vec3 col(0, 0, 0);
+            vec3 pCol(0, 0, 0);
+            vec3 oCol(0, 0, 0);
             for (int s = 0; s < ns; s++) {
                 float u = float(i + unitRand()) / float(nx);
                 float v = float(j + unitRand()) / float(ny);
-                Ray r = cam.get_ray(u, v);
+                Ray pRay = pCam.get_ray(u, v);
+                pCol += color(pRay, world);
+
+                Ray oRay = oCam.get_ray(u, v);
+                oCol += color(oRay, world);
                 //vec3 p = r.point_at_parameter(2.0);
-                col += color(r, world);
             }
             
-            col/= float(ns);
-            int ir = int(255.99*col[0]);
-            int ig = int(255.99*col[1]);
-            int ib = int(255.99*col[2]);
+            pCol/= float(ns);
+            int pir = int(255.99*pCol[0]);
+            int pig = int(255.99*pCol[1]);
+            int pib = int(255.99*pCol[2]);
 
-            file << ir << " " << ig << " " << ib << std::endl;
-            image[ny - 1 - j][i] = rgb_pixel(ir, ig, ib);
+            oCol/= float(ns);
+            int oir = int(255.99*oCol[0]);
+            int oig = int(255.99*oCol[1]);
+            int oib = int(255.99*oCol[2]);
+            //file << ir << " " << ig << " " << ib << std::endl;
+            prspcImage[ny - 1 - j][i] = rgb_pixel(pir, pig, pib);
+            orthgImage[ny - 1 - j][i] = rgb_pixel(oir, oig, oib);
         }
     }
-    file.close();
-    image.write(name + ".png");
+    //file.close();
+    prspcImage.write(name + "-perspective.png");
+    orthgImage.write(name + "-orthgraphic.png");
 
 
     return 0;

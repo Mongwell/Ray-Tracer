@@ -1,5 +1,5 @@
 EXENAME = render
-OBJS = Ray.o Sphere.o Scene.o Camera.o main.o
+OBJS = Ray.o Sphere.o Scene.o PrspcCamera.o OrthgCamera.o main.o
 IMAGES = sphere
 
 CXX = clang++
@@ -14,16 +14,19 @@ all : $(EXENAME)
 $(EXENAME): $(OBJS)
 	$(LD) -o $(EXENAME) $(OBJS) $(LDFLAGS) 
 
-main.o : Ray.o Scene.o Sphere.o Camera.o main.cpp
+main.o : Hittable.h Ray.h Scene.h Sphere.h Camera.h main.cpp
 	$(CXX) main.cpp $(CXXFLAGS)
 
-Camera.o : Ray.o Camera.h Camera.cpp
-	$(CXX) Camera.cpp $(CXXFLAGS)
+PrspcCamera.o : Ray.h PrspcCamera.h PrspcCamera.cpp
+	$(CXX) PrspcCamera.cpp $(CXXFLAGS)
+
+OrthgCamera.o : Ray.h OrthgCamera.h OrthgCamera.cpp
+	$(CXX) OrthgCamera.cpp $(CXXFLAGS)
 
 Sphere.o : Hittable.h Sphere.h Sphere.cpp
 	$(CXX) Sphere.cpp $(CXXFLAGS)
 
-Scene.o : Hittable.h Scene.h Scene.cpp
+Scene.o : Hittable.h Ray.h Scene.h Scene.cpp
 	$(CXX) Scene.cpp $(CXXFLAGS)
 
 Ray.o : Ray.h Ray.cpp
@@ -33,4 +36,4 @@ clean :
 	rm -f *.o $(EXENAME) 
 
 image-cleanup :
-	rm -f $(IMAGES).png $(IMAGES).ppm
+	rm -f $(IMAGES)*.png $(IMAGES)*.ppm
