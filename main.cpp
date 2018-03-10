@@ -65,9 +65,9 @@ vec3 color(const Ray& r, const Scene& world, int i = 0) {
 
 int main() {
     
-    int nx = 600;
-    int ny = 300;
-    int ns = 1;
+    int nx = 200;
+    int ny = 100;
+    int ns = 50;
 
     //ofstream file;
     string name = "";
