@@ -1,5 +1,5 @@
-EXENAME = main
-OBJS = main.o Ray.o Sphere.o Scene.o
+EXENAME = render
+OBJS = Ray.o Sphere.o Scene.o Camera.o main.o
 IMAGES = sphere
 
 CXX = clang++
@@ -14,8 +14,11 @@ all : $(EXENAME)
 $(EXENAME): $(OBJS)
 	$(LD) -o $(EXENAME) $(OBJS) $(LDFLAGS) 
 
-main.o : Ray.o Scene.o Sphere.o main.cpp
+main.o : Ray.o Scene.o Sphere.o Camera.o main.cpp
 	$(CXX) main.cpp $(CXXFLAGS)
+
+Camera.o : Ray.o Camera.h Camera.cpp
+	$(CXX) Camera.cpp $(CXXFLAGS)
 
 Sphere.o : Hittable.h Sphere.h Sphere.cpp
 	$(CXX) Sphere.cpp $(CXXFLAGS)
