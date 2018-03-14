@@ -1,4 +1,3 @@
-#include <iostream>
 #include <fstream>
 #include <string>
 #include <random>
@@ -11,6 +10,7 @@
 #include "Scene.h"
 #include "PrspcCamera.h"
 #include "OrthgCamera.h"
+#include "ProgressMeter.h"
 
 using std::random_device;
 using std::mt19937;
@@ -69,14 +69,11 @@ int main() {
     int ny = 600;
     int ns = 256;
 
-    //ofstream file;
     string name = "";
-    //file.open(name + ".ppm", ios::out);
     image<rgb_pixel> prspcImage(nx, ny);
     image<rgb_pixel> orthgImage(nx, ny);
     
 
-    //file << "P3\n" << nx << " " << ny << "\n255\n";
 
     PrspcCamera pCam;
     OrthgCamera oCam;
@@ -90,8 +87,7 @@ int main() {
     unsigned count = 0;
     for (int j = ny - 1; j >= 0; --j) {
         for (int i = 0; i < nx; ++i, ++count) {
-            std::cout.precision(3);
-            std::cout << std::flush << "\r" << 100 * float(count) / float(nx*ny) << "%\t" << "complete...   " << std::flush; 
+            printProgress(float(count) / (nx * ny));
 
             vec3 pCol(0, 0, 0);
             vec3 oCol(0, 0, 0);
@@ -117,12 +113,12 @@ int main() {
             int oir = int(255.99*oCol[0]);
             int oig = int(255.99*oCol[1]);
             int oib = int(255.99*oCol[2]);
-            //file << ir << " " << ig << " " << ib << std::endl;
             prspcImage[ny - 1 - j][i] = rgb_pixel(pir, pig, pib);
             orthgImage[ny - 1 - j][i] = rgb_pixel(oir, oig, oib);
         }
     }
-    //file.close();
+    printProgress(1);
+
     prspcImage.write(name + "perspective.png");
     orthgImage.write(name + "orthographic.png");
 
