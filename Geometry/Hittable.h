@@ -1,7 +1,7 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
-#include "Ray.h"
+#include "../Ray.h"
 
 struct hit_record {
     /**

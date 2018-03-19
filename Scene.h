@@ -1,7 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 #include <vector>
-#include "Hittable.h"
+#include "Geometry/Hittable.h"
 
 class Scene : public Hittable {
 

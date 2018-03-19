@@ -4,12 +4,12 @@
 #include <png++/png.hpp>
 #include <glm/glm.hpp>
 #include <cfloat>
-#include "Sphere.h"
-#include "Triangle.h"
-#include "Quadrilateral.h"
+#include "Geometry/Sphere.h"
+#include "Geometry/Triangle.h"
+#include "Geometry/Quadrilateral.h"
 #include "Scene.h"
-#include "PrspcCamera.h"
-#include "OrthgCamera.h"
+#include "Cameras/PrspcCamera.h"
+#include "Cameras/OrthgCamera.h"
 #include "ProgressMeter.h"
 
 using std::random_device;

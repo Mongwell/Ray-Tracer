@@ -1,9 +1,9 @@
 EXENAME = render
-OBJS = Ray.o Sphere.o Triangle.o Quadrilateral.o Scene.o PrspcCamera.o OrthgCamera.o main.o
+OBJS = Ray.o Geometry/Sphere.o Geometry/Triangle.o Geometry/Quadrilateral.o Scene.o Cameras/PrspcCamera.o Cameras/OrthgCamera.o main.o
 IMAGES = 
 
 CXX = clang++
-CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -Werror -pedantic `libpng-config --cflags`
+CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -Werror -pedantic -o $@ `libpng-config --cflags`
 
 LD = clang++
 LDFLAGS = -std=c++1y -stdlib=libc++ `libpng-config --ldflags`
@@ -14,32 +14,32 @@ all : $(EXENAME)
 $(EXENAME): $(OBJS)
 	$(LD) -o $(EXENAME) $(OBJS) $(LDFLAGS) 
 
-main.o : Hittable.h Ray.h Scene.h Sphere.h Triangle.h Quadrilateral.h PrspcCamera.h OrthgCamera.h main.cpp
+main.o : Geometry/Hittable.h Ray.h Scene.h Geometry/Sphere.h Geometry/Triangle.h Geometry/Quadrilateral.h Cameras/PrspcCamera.h Cameras/OrthgCamera.h main.cpp
 	$(CXX) main.cpp $(CXXFLAGS)
 
-PrspcCamera.o : Ray.h PrspcCamera.h PrspcCamera.cpp
-	$(CXX) PrspcCamera.cpp $(CXXFLAGS)
+Cameras/PrspcCamera.o : Ray.h Cameras/PrspcCamera.h Cameras/PrspcCamera.cpp
+	$(CXX) Cameras/PrspcCamera.cpp $(CXXFLAGS)
 
-OrthgCamera.o : Ray.h OrthgCamera.h OrthgCamera.cpp
-	$(CXX) OrthgCamera.cpp $(CXXFLAGS)
+Cameras/OrthgCamera.o : Ray.h Cameras/OrthgCamera.h Cameras/OrthgCamera.cpp
+	$(CXX) Cameras/OrthgCamera.cpp $(CXXFLAGS)
 
-Triangle.o : Hittable.h Triangle.h Triangle.cpp
-	$(CXX) Triangle.cpp $(CXXFLAGS)
+Geometry/Triangle.o : Geometry/Hittable.h Geometry/Triangle.h Geometry/Triangle.cpp
+	$(CXX) Geometry/Triangle.cpp $(CXXFLAGS)
 
-Quadrilateral.o : Hittable.h Triangle.h Quadrilateral.h Quadrilateral.cpp
-	$(CXX) Quadrilateral.cpp $(CXXFLAGS)
+Geometry/Quadrilateral.o : Geometry/Hittable.h Geometry/Triangle.h Geometry/Quadrilateral.h Geometry/Quadrilateral.cpp
+	$(CXX) Geometry/Quadrilateral.cpp $(CXXFLAGS)
 
-Sphere.o : Hittable.h Sphere.h Sphere.cpp
-	$(CXX) Sphere.cpp $(CXXFLAGS)
+Geometry/Sphere.o : Geometry/Hittable.h Geometry/Sphere.h Geometry/Sphere.cpp
+	$(CXX) Geometry/Sphere.cpp $(CXXFLAGS)
 
-Scene.o : Hittable.h Ray.h Scene.h Scene.cpp
+Scene.o : Geometry/Hittable.h Ray.h Scene.h Scene.cpp
 	$(CXX) Scene.cpp $(CXXFLAGS)
 
 Ray.o : Ray.h Ray.cpp
 	$(CXX) Ray.cpp $(CXXFLAGS)
 
 clean :
-	rm -f *.o $(EXENAME) 
+	rm -f **/*.o *.o $(EXENAME) 
 
 image-cleanup :
 	rm -f *.png *.ppm
