@@ -8,5 +8,7 @@ Libraries Used (Dependencies):
 Resources:
 
     Ray Tracing in One Weekend - Peter Shirley
+
+    Ray Tracing The Next Week - Peter Shirley
     
     Möller-Trumbore triangle intersection algorithm (https://goo.gl/uEUXGn)
