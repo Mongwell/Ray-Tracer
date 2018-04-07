@@ -1,5 +1,5 @@
 EXENAME = render
-OBJS = Ray.o Geometry/Sphere.o Geometry/Triangle.o Geometry/Quadrilateral.o Geometry/BoundingBox.o BVH.o Cameras/PrspcCamera.o Cameras/OrthgCamera.o main.o
+OBJS = Ray.o Geometry/Sphere.o Geometry/Triangle.o Geometry/Quadrilateral.o Geometry/BoundingBox.o BVH.o Scene.o Cameras/PrspcCamera.o Cameras/OrthgCamera.o main.o
 
 CXX = clang++
 CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -Werror -pedantic -o $@ `libpng-config --cflags`

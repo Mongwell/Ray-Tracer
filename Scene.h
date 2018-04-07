@@ -3,7 +3,7 @@
 #include <vector>
 #include "Geometry/Hittable.h"
 
-class Scene : public Hittable {
+class Scene {
 
     public:
 

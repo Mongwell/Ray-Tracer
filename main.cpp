@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <vector>
 #include <cfloat>
+#include <iostream>
 #include "Geometry/Sphere.h"
 #include "Geometry/Triangle.h"
 #include "Geometry/Quadrilateral.h"
@@ -14,6 +15,9 @@
 #include "ProgressMeter.h"
 #include "BVH.h"
 
+using std::cout;
+using std::endl;
+using std::stoi;
 using std::random_device;
 using std::mt19937;
 using std::uniform_real_distribution;
@@ -25,21 +29,16 @@ using namespace glm;
 using png::image;
 using png::rgb_pixel;
 
-/*void writePPM(vec3** colors, unsigned width, unsigned height, ofstream file) {*/
-    //file << "P3\n" << width << " " << height << "\n255\n";
-
-//}
-
-//void writePNG(vec3** colors, unsigned width, unsigned height, image<rgb_pixel> file) {
-
-//}
-
 float unitRand() {
     random_device random;
     mt19937 gen(random());
     uniform_real_distribution<float> distribution;
 
     return distribution(random);
+}
+
+float random(float lower, float upper) {
+    return (unitRand() * (upper - lower + 1)) + lower;
 }
 
 vec3 random_in_unit_sphere() {
@@ -66,26 +65,29 @@ vec3 color(const Ray& r, const BVH& world, unsigned depth = 0) {
     return scalar * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
 }
 
-int main() {
-    
-    int nx = 300;
-    int ny = 200;
-    int ns = 5;
+int main(int argc, char** argv) {
+    if (argc != 5) {
+        cout << "USAGE: ./render height width samples spheres" << endl;
+        return 1;
+    }
 
-    string name = "";
+    int nx = stoi(argv[2]);
+    int ny = stoi(argv[1]);
+    int ns = stoi(argv[3]);
+    unsigned spheres = stoi(argv[4]);
+
     image<rgb_pixel> prspcImage(nx, ny);
-    image<rgb_pixel> orthgImage(nx, ny);
+    //image<rgb_pixel> orthgImage(nx, ny);
     
 
 
     PrspcCamera pCam;
-    OrthgCamera oCam;
+    //OrthgCamera oCam;
 
     vector<Hittable*> scene;
-    scene.push_back(new Sphere(vec3(0, 0, -1), 0.4));
-    scene.push_back(new Sphere(vec3(0, -100.5, -2), 100));
-    scene.push_back(new Triangle(vec3(-1, 0, -1), vec3(-2, 0, -1), vec3(-1, 0.5, -1)));
-    scene.push_back(new Quadrilateral(vec3(0, 0, -1), vec3(-1, 0, -1), vec3(1, 0.2, -1), vec3(1, 0.3, -1)));
+    for (unsigned count = 0; count < spheres; ++count) {
+        scene.push_back(new Sphere(vec3(random(-3, 3), random(-2, 4), random(-20, -2)), random(0.005, 0.1)));
+    }
     BVH world(scene);
 
     unsigned count = 0;
@@ -94,16 +96,15 @@ int main() {
             printProgress(float(count) / (nx * ny));
 
             vec3 pCol(0, 0, 0);
-            vec3 oCol(0, 0, 0);
+            //vec3 oCol(0, 0, 0);
             for (int s = 0; s < ns; s++) {
                 float u = float(i + unitRand()) / float(nx);
                 float v = float(j + unitRand()) / float(ny);
                 Ray pRay = pCam.get_ray(u, v);
                 pCol += color(pRay, world);
 
-                Ray oRay = oCam.get_ray(u, v);
-                oCol += color(oRay, world);
-                //vec3 p = r.point_at_parameter(2.0);
+                //Ray oRay = oCam.get_ray(u, v);
+                //oCol += color(oRay, world);
             }
             
             pCol/= float(ns);
@@ -112,19 +113,20 @@ int main() {
             int pig = int(255.99*pCol[1]);
             int pib = int(255.99*pCol[2]);
 
-            oCol/= float(ns);
-            oCol = sqrt(oCol);
-            int oir = int(255.99*oCol[0]);
-            int oig = int(255.99*oCol[1]);
-            int oib = int(255.99*oCol[2]);
+            //oCol/= float(ns);
+            /*oCol = sqrt(oCol);*/
+            //int oir = int(255.99*oCol[0]);
+            //int oig = int(255.99*oCol[1]);
+            /*int oib = int(255.99*oCol[2]);*/
+
             prspcImage[ny - 1 - j][i] = rgb_pixel(pir, pig, pib);
-            orthgImage[ny - 1 - j][i] = rgb_pixel(oir, oig, oib);
+            //orthgImage[ny - 1 - j][i] = rgb_pixel(oir, oig, oib);
         }
     }
     printProgress(1);
 
-    prspcImage.write(name + "perspective.png");
-    orthgImage.write(name + "orthographic.png");
+    prspcImage.write("perspective.png");
+    //orthgImage.write(name + "orthographic.png");
 
 
     return 0;
