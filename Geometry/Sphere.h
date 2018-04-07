@@ -10,6 +10,9 @@ class Sphere : public Hittable {
          */
         Sphere(glm::vec3 cen, float r);
 
+        Sphere(const Sphere& other);
+        virtual Hittable* clone() const;
+
         /**
          * Dtor.
          */
@@ -20,6 +23,8 @@ class Sphere : public Hittable {
          * See Hittable.h
          */
         virtual bool hit(const Ray& r, float tmin, float tmax, hit_record& rec) const;
+
+        virtual BoundingBox bounds() const;
 
         const glm::vec3 center;
         const float radius;

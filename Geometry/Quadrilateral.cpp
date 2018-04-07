@@ -3,7 +3,15 @@
 
 Quadrilateral::Quadrilateral(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3, glm::vec3 point4) : t1(Triangle(point1, point2, point3)), t2(Triangle(point3, point2, point4)) {  }
 
+Quadrilateral::Quadrilateral(const Quadrilateral& other) : t1(other.t1), t2(other.t2) {  }
+
+Hittable* Quadrilateral::clone() const { return new Quadrilateral(*this); }
+
 Quadrilateral::~Quadrilateral() {  }
+
+BoundingBox Quadrilateral::bounds() const {
+    return t1.bounds() + t2.bounds();
+}
 
 bool Quadrilateral::hit(const Ray& r, float tmin, float tmax, hit_record& rec) const {
     hit_record rec1;

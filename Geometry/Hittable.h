@@ -2,6 +2,7 @@
 #define HITTABLE_H
 
 #include "../Ray.h"
+#include "BoundingBox.h"
 
 struct hit_record {
     /**
@@ -20,6 +21,8 @@ struct hit_record {
     glm::vec3 normal;
 };
 
+class BoundingBox;
+
 class Hittable {
     public:
 
@@ -32,7 +35,9 @@ class Hittable {
          * @return if object was hit
          */
         virtual bool hit(const Ray& r, float t_min, float t_max, hit_record& rec) const = 0;
+        virtual BoundingBox bounds() const = 0;
 
+        virtual Hittable* clone() const = 0;
         /**
          * Dtor.
          */

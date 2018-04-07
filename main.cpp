@@ -3,6 +3,7 @@
 #include <random>
 #include <png++/png.hpp>
 #include <glm/glm.hpp>
+#include <vector>
 #include <cfloat>
 #include "Geometry/Sphere.h"
 #include "Geometry/Triangle.h"
@@ -11,6 +12,7 @@
 #include "Cameras/PrspcCamera.h"
 #include "Cameras/OrthgCamera.h"
 #include "ProgressMeter.h"
+#include "BVH.h"
 
 using std::random_device;
 using std::mt19937;
@@ -18,6 +20,7 @@ using std::uniform_real_distribution;
 using std::ofstream;
 using std::string;
 using std::ios;
+using std::vector;
 using namespace glm;
 using png::image;
 using png::rgb_pixel;
@@ -47,7 +50,7 @@ vec3 random_in_unit_sphere() {
     return p;
 }
 
-vec3 color(const Ray& r, const Scene& world, unsigned depth = 0) {
+vec3 color(const Ray& r, const BVH& world, unsigned depth = 0) {
     hit_record rec;
     if (world.hit(r, 0.001, FLT_MAX, rec) && depth < 25) {
         vec3 target = rec.p + rec.normal + random_in_unit_sphere();
@@ -65,9 +68,9 @@ vec3 color(const Ray& r, const Scene& world, unsigned depth = 0) {
 
 int main() {
     
-    int nx = 900;
-    int ny = 600;
-    int ns = 256;
+    int nx = 300;
+    int ny = 200;
+    int ns = 5;
 
     string name = "";
     image<rgb_pixel> prspcImage(nx, ny);
@@ -78,11 +81,12 @@ int main() {
     PrspcCamera pCam;
     OrthgCamera oCam;
 
-    Scene world;
-    world.scene.push_back(new Sphere(vec3(0, 0, -1), 0.4));
-    world.scene.push_back(new Sphere(vec3(0, -100.5, -2), 100));
-    world.scene.push_back(new Triangle(vec3(-1, 0, -1), vec3(-2, 0, -1), vec3(-1, 0.5, -1)));
-    world.scene.push_back(new Quadrilateral(vec3(0, 0, -1), vec3(-1, 0, -1), vec3(1, 0.2, -1), vec3(1, 0.3, -1)));
+    vector<Hittable*> scene;
+    scene.push_back(new Sphere(vec3(0, 0, -1), 0.4));
+    scene.push_back(new Sphere(vec3(0, -100.5, -2), 100));
+    scene.push_back(new Triangle(vec3(-1, 0, -1), vec3(-2, 0, -1), vec3(-1, 0.5, -1)));
+    scene.push_back(new Quadrilateral(vec3(0, 0, -1), vec3(-1, 0, -1), vec3(1, 0.2, -1), vec3(1, 0.3, -1)));
+    BVH world(scene);
 
     unsigned count = 0;
     for (int j = ny - 1; j >= 0; --j) {

@@ -1,6 +1,5 @@
 EXENAME = render
-OBJS = Ray.o Geometry/Sphere.o Geometry/Triangle.o Geometry/Quadrilateral.o Scene.o Cameras/PrspcCamera.o Cameras/OrthgCamera.o main.o
-IMAGES = 
+OBJS = Ray.o Geometry/Sphere.o Geometry/Triangle.o Geometry/Quadrilateral.o Geometry/BoundingBox.o BVH.o Cameras/PrspcCamera.o Cameras/OrthgCamera.o main.o
 
 CXX = clang++
 CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -Werror -pedantic -o $@ `libpng-config --cflags`
@@ -29,11 +28,17 @@ Geometry/Triangle.o : Geometry/Hittable.h Geometry/Triangle.h Geometry/Triangle.
 Geometry/Quadrilateral.o : Geometry/Hittable.h Geometry/Triangle.h Geometry/Quadrilateral.h Geometry/Quadrilateral.cpp
 	$(CXX) Geometry/Quadrilateral.cpp $(CXXFLAGS)
 
+Geometry/BoundingBox.o : Ray.h Geometry/BoundingBox.h Geometry/BoundingBox.cpp
+	$(CXX) Geometry/BoundingBox.cpp $(CXXFLAGS)
+
 Geometry/Sphere.o : Geometry/Hittable.h Geometry/Sphere.h Geometry/Sphere.cpp
 	$(CXX) Geometry/Sphere.cpp $(CXXFLAGS)
 
 Scene.o : Geometry/Hittable.h Ray.h Scene.h Scene.cpp
 	$(CXX) Scene.cpp $(CXXFLAGS)
+
+BVH.o : Geometry/Hittable.h BVH.h BVH.cpp 
+	$(CXX) BVH.cpp $(CXXFLAGS)
 
 Ray.o : Ray.h Ray.cpp
 	$(CXX) Ray.cpp $(CXXFLAGS)
