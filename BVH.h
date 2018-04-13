@@ -10,7 +10,6 @@ class BVH : public Hittable {
     public:
         BVH();
         BVH(vector<Hittable*>& elems);
-        virtual Hittable* clone() const;
         ~BVH();
 
         virtual bool hit(const Ray& r, float tmin, float tmax, hit_record& rec) const;

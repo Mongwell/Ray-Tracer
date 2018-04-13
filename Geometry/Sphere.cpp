@@ -6,10 +6,6 @@ using namespace glm;
 
 Sphere::Sphere(vec3 cen, float r) : center(cen), radius(r) {}
 
-Sphere::Sphere(const Sphere& other) : center(other.center), radius(other.radius) {  }
-
-Hittable* Sphere::clone() const { return new Sphere(*this); }
-
 Sphere::~Sphere() {}
 
 bool Sphere::hit(const Ray& r, float t_min, float t_max, hit_record& rec) const {

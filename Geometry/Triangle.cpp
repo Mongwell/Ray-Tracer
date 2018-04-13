@@ -5,19 +5,6 @@ using namespace glm;
 
 Triangle::Triangle(vec3 point1, vec3 point2, vec3 point3) : vertices_(new vec3[3]{point1, point2, point3}) {  }
 
-Triangle::Triangle(const Triangle& other) {
-    vertices_ = new vec3[3];
-    for (int i = 0; i < 2; ++i) {
-        for (int j = 0; j < 2; ++j) {
-            vertices_[i][j] = other.vertices_[i][j];
-        }
-    }
-}
-
-Hittable* Triangle::clone() const {
-    return new Triangle(*this);
-}
-
 Triangle::~Triangle() {
     if (vertices_ != NULL) {
         delete[] vertices_;

@@ -1,6 +1,9 @@
 EXENAME = render
 OBJS = Ray.o Geometry/Sphere.o Geometry/Triangle.o Geometry/Quadrilateral.o Geometry/BoundingBox.o BVH.o Scene.o Cameras/PrspcCamera.o Cameras/OrthgCamera.o main.o
 
+EXE2 = render_linear
+OBJS2 = Ray.o Geometry/Sphere.o Geometry/Triangle.o Geometry/Quadrilateral.o Geometry/BoundingBox.o BVH.o Scene.o Cameras/PrspcCamera.o Cameras/OrthgCamera.o main_linear.o
+
 CXX = clang++
 CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -Werror -pedantic -o $@ `libpng-config --cflags`
 
@@ -10,8 +13,14 @@ LDFLAGS = -std=c++1y -stdlib=libc++ `libpng-config --ldflags`
 
 all : $(EXENAME)
 
-$(EXENAME): $(OBJS)
+$(EXENAME) : $(OBJS)
 	$(LD) -o $(EXENAME) $(OBJS) $(LDFLAGS) 
+
+$(EXE2) : $(OBJS2)
+	$(LD) -o $(EXE2) $(OBJS2) $(LDFLAGS)
+
+main_linear.o : Geometry/Hittable.h Ray.h Scene.h Geometry/Sphere.h Geometry/Triangle.h Geometry/Quadrilateral.h Cameras/PrspcCamera.h Cameras/OrthgCamera.h main_linear.cpp
+	$(CXX) main_linear.cpp $(CXXFLAGS)
 
 main.o : Geometry/Hittable.h Ray.h Scene.h Geometry/Sphere.h Geometry/Triangle.h Geometry/Quadrilateral.h Cameras/PrspcCamera.h Cameras/OrthgCamera.h main.cpp
 	$(CXX) main.cpp $(CXXFLAGS)
@@ -44,7 +53,7 @@ Ray.o : Ray.h Ray.cpp
 	$(CXX) Ray.cpp $(CXXFLAGS)
 
 clean :
-	rm -f **/*.o *.o $(EXENAME) 
+	rm -f **/*.o *.o $(EXENAME) $(EXE2)
 
 image-cleanup :
 	rm -f *.png *.ppm

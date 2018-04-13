@@ -6,8 +6,6 @@ class Triangle : public Hittable {
     public:
 
         Triangle(glm::vec3 point1, glm::vec3 point2, glm::vec3 point3);
-        Triangle(const Triangle& other);
-        virtual Hittable* clone() const;
         virtual ~Triangle();
 
         /**

@@ -10,9 +10,6 @@ class Sphere : public Hittable {
          */
         Sphere(glm::vec3 cen, float r);
 
-        Sphere(const Sphere& other);
-        virtual Hittable* clone() const;
-
         /**
          * Dtor.
          */

@@ -49,7 +49,7 @@ vec3 random_in_unit_sphere() {
     return p;
 }
 
-vec3 color(const Ray& r, const BVH& world, unsigned depth = 0) {
+vec3 color(const Ray& r, const Scene& world, unsigned depth = 0) {
     hit_record rec;
     if (world.hit(r, 0.001, FLT_MAX, rec) && depth < 25) {
         vec3 target = rec.p + rec.normal + random_in_unit_sphere();
@@ -84,12 +84,12 @@ int main(int argc, char** argv) {
     PrspcCamera pCam;
     //OrthgCamera oCam;
 
-    vector<Hittable*> scene;
+    //vector<Hittable*> scene;
 
+    Scene world;
     for (unsigned count = 0; count < spheres; ++count) {
-        scene.push_back(new Sphere(vec3(random(-2.5, 2.5), random(-1.75, 1.75), random(-5, -2)), random(0.06, 0.1)));
+        world.scene.push_back(new Sphere(vec3(random(-2.5, 2.5), random(-1.75, 1.75), random(-5, -2)), random(0.06, 0.1)));
     }
-    BVH world(scene);
 
     unsigned count = 0;
     for (int j = ny - 1; j >= 0; --j) {

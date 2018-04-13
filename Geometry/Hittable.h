@@ -37,7 +37,6 @@ class Hittable {
         virtual bool hit(const Ray& r, float t_min, float t_max, hit_record& rec) const = 0;
         virtual BoundingBox bounds() const = 0;
 
-        virtual Hittable* clone() const = 0;
         /**
          * Dtor.
          */

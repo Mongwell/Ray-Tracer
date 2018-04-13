@@ -12,7 +12,7 @@ class BoundingBox {
         glm::vec3 getMin();
         glm::vec3 getMax();
 
-        bool hit (const Ray& r, float t_min, float t_max) const;
+        bool hit(const Ray& r, float t_min, float t_max) const;
 
         BoundingBox operator+(const BoundingBox& rhs);
 

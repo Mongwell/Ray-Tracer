@@ -39,12 +39,9 @@ BoundingBox BVH::BVHNode::bounds() const { return box; }
 
 BVH::BVH() : root_(NULL) {  }
 
-Hittable* BVH::clone() const { return NULL; }
-
 Hittable* BVH::construct(vector<Hittable*>& elems, vector<Hittable*>::iterator left, 
         vector<Hittable*>::iterator right, unsigned dim) {
 
-    if ((left == right) && (left == elems.end())) return NULL;
     if (left == right) return (*left); 
 
     BoxCompare comp(dim);
@@ -54,17 +51,13 @@ Hittable* BVH::construct(vector<Hittable*>& elems, vector<Hittable*>::iterator l
 
     node->left = construct(elems, left, left + (right - left) / 2, (dim + 1) % 3);
     node->right = construct(elems, left + (right - left) / 2 + 1, right, (dim + 1) % 3);
-
-    if (node->left && node->right) node->box = (node->left->bounds()) + (node->right->bounds());
-    else if (node->left) node->box = node->left->bounds();
-    else if (node->right) node->box = node->right->bounds();
-    else return NULL;
+    node->box = (node->left->bounds()) + (node->right->bounds());
 
     return node;
 }
 
 BVH::BVH(vector<Hittable*>& elems) {
-    root_ = construct(elems, elems.begin(), elems.end(), 0);
+    root_ = construct(elems, elems.begin(), elems.end() - 1, 0);
 }
 
 bool BVH::hit (const Ray& r, float tmin, float tmax, hit_record& rec) const {
