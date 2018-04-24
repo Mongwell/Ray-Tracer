@@ -72,7 +72,7 @@ int main(int argc, char** argv) {
         "Options:\n"
         "\t-o orthographic rendering\n"
         "\t-p perspective rendering (default)\n\n"
-        "NOTE: Due to randomized locations/radii and overlapping,"
+        "NOTE: Due to randomized locations/radii and overlapping, "
         "not all spheres may be visible!";
 
     vector<string> args(argv + 1, argv + argc + !argc);
@@ -125,7 +125,7 @@ int main(int argc, char** argv) {
 
     vector<Hittable*> scene;
     for (unsigned count = 0; count < spheres; ++count) {
-        scene.push_back(new Sphere(vec3(random(-2.5, 2.5), random(-1.75, 1.75), random(-5, -2)), random(0.06, 0.1)));
+        scene.push_back(new Sphere(vec3(random(-7, 7), random(-5, 5), random(-13, -4)), random(0.01, 0.1)));
     }
     BVH world(scene);
 
