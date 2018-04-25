@@ -1,3 +1,4 @@
+#include <omp.h>
 #include <stdexcept>
 #include <fstream>
 #include <string>
@@ -136,9 +137,16 @@ int main(int argc, char** argv) {
     OrthgCamera oCam;
 
     unsigned count = 0;
+
+    #pragma omp parallel for schedule(dynamic) collapse(2)
     for (int j = ny - 1; j >= 0; --j) {
-        for (int i = 0; i < nx; ++i, ++count) {
+        for (int i = 0; i < nx; ++i) {
+
+            #pragma omp critical
             printProgress(float(count) / (nx * ny));
+
+            #pragma omp atomic
+                ++count;
 
             vec3 pCol(0, 0, 0);
             vec3 oCol(0, 0, 0);

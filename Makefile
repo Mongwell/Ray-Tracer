@@ -5,10 +5,10 @@ EXE2 = render_linear
 OBJS2 = Ray.o Geometry/Sphere.o Geometry/Triangle.o Geometry/Quadrilateral.o Geometry/BoundingBox.o BVH.o Scene.o Cameras/PrspcCamera.o Cameras/OrthgCamera.o main_linear.o
 
 CXX = clang++
-CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -Werror -pedantic -o $@ `libpng-config --cflags`
+CXXFLAGS = -std=c++1y -stdlib=libc++ -c -g -O0 -Wall -Wextra -Werror -fopenmp -pedantic -o $@ `libpng-config --cflags`
 
 LD = clang++
-LDFLAGS = -std=c++1y -stdlib=libc++ `libpng-config --ldflags`
+LDFLAGS = -std=c++1y -stdlib=libc++ -fopenmp `libpng-config --ldflags`
 
 
 all : $(EXENAME)
