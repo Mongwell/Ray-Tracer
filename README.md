@@ -13,3 +13,4 @@ cmake --build build/
 
 ## Resources:
 - [Ray Tracing in One Weekend - Peter Shirley](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
+- [ Single-file Header-only Libraries - Sean T. Barrett ](https://github.com/nothings/stb)
