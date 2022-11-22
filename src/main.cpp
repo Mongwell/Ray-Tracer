@@ -1,5 +1,5 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "../external/stb_image_write.h"
 #include <iostream>
 
 using namespace std;
