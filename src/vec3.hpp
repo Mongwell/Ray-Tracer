@@ -3,12 +3,12 @@
 
 #include <ostream>
 
-struct pixel {
-    char r;
-    char g;
-    char b;
+struct pixelColor {
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
 };
-typedef pixel pixel;
+typedef pixelColor pixelColor;
 
 class vec3 {
   private:
@@ -44,7 +44,7 @@ class vec3 {
     double length_squared() const;
     double length() const;
 
-    pixel to_pixel() const;
+    pixelColor to_pixel_color() const;
 };
 
 // Type aliases
