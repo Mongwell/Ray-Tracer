@@ -5,13 +5,6 @@
 
 using namespace std;
 
-struct pixel {
-    char r;
-    char g;
-    char b;
-};
-typedef pixel pixel;
-
 // Rendering [=========>         ] 50%
 // progress should be a number between 0 and 1
 void print_progress_meter(const float progress) {

@@ -34,6 +34,12 @@ double vec3::sum() const { return data[0] + data[1] + data[2]; }
 
 double vec3::length() const { return sqrt(length_squared()); }
 
+pixel vec3::to_pixel() const {
+    return {static_cast<char>(data[0] * 255.999),
+            static_cast<char>(data[1] * 255.999),
+            static_cast<char>(data[2] * 255.999)};
+}
+
 // Utility Functions Definitions //
 
 ostream &operator<<(ostream &out, const vec3 &v) {

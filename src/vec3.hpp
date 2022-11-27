@@ -3,6 +3,13 @@
 
 #include <ostream>
 
+struct pixel {
+    char r;
+    char g;
+    char b;
+};
+typedef pixel pixel;
+
 class vec3 {
   private:
     double data[3];
@@ -36,6 +43,8 @@ class vec3 {
     double sum() const;
     double length_squared() const;
     double length() const;
+
+    pixel to_pixel() const;
 };
 
 // Type aliases
