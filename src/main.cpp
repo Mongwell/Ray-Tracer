@@ -27,7 +27,20 @@ void print_progress_meter(const float progress) {
                     << std::flush;
 }
 
+bool hit_sphere(const point3 &center, double radius, const ray &r) {
+    // check if ray hits sphere using quadratic formula discriminant
+    vec3 c2o = r.origin() - center;
+    double a = dot(r.direction(), r.direction());
+    double b = 2.0 * dot(c2o, r.direction());
+    double c = dot(c2o, c2o) - radius * radius;
+    double discriminant = b*b - 4*a*c;
+
+    return discriminant > 0;
+}
+
 color ray_color(const ray &r) {
+    if (hit_sphere(point3(0, 0, -1), 0.5, r))
+        return color(1, 0, 0);
     const color bg_color1(0.5, 0.7, 1.0);
     const color bg_color2(1, 1, 1);
     vec3 unit_direction = unit_vector(r.direction());
