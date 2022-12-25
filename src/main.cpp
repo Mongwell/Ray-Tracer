@@ -22,9 +22,8 @@ void print_progress_meter(const float progress) {
         }
     }
     meter = "Rendering [" + meter + "] ";
-    std::cerr << '\r' << meter
-                    << static_cast<int>(progress * 100) << '%'
-                    << std::flush;
+    std::cerr << '\r' << meter << static_cast<int>(progress * 100) << '%'
+              << std::flush;
 }
 
 double hit_sphere(const point3 &center, double radius, const ray &r) {
