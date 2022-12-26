@@ -11,7 +11,7 @@ struct pixelColor {
 typedef pixelColor pixelColor;
 
 class vec3 {
-  private:
+  public:
     double data[3];
 
   public:
