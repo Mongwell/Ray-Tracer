@@ -12,9 +12,6 @@ typedef pixelColor pixelColor;
 
 class vec3 {
   public:
-    double data[3];
-
-  public:
     // Constructors
     vec3() : data{0, 0, 0} {}
     vec3(double v0, double v1, double v2) : data{v0, v1, v2} {}
@@ -45,6 +42,9 @@ class vec3 {
     double length() const;
 
     pixelColor to_pixel_color() const;
+
+  public:
+    double data[3];
 };
 
 // Type aliases
