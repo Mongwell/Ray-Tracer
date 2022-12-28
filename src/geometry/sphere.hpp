@@ -10,7 +10,7 @@ class sphere : public geometric {
 
     bool intersect(const ray &r, double t_min, double t_max,
                    hit_record *rec) const override;
-    vec3 unit_surface_norm(const point3 p) const;
+    vec3 out_unorm(const point3 p) const;
 
   public:
     point3 center;

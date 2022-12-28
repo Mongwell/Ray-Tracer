@@ -28,11 +28,11 @@ bool sphere::intersect(const ray &r, double t_min, double t_max,
 
     rec->t = root;
     rec->p = r.at(rec->t);
-    rec->norm = unit_surface_norm(rec->p);
+    rec->set_face_norm(r, out_unorm(rec->p));
 
     return true;
 }
 
-vec3 sphere::unit_surface_norm(const point3 p) const {
+vec3 sphere::out_unorm(const point3 p) const {
     return (p - center) / radius;
 }

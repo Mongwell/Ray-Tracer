@@ -7,11 +7,17 @@ struct hit_record {
     point3 p;
     vec3 norm;
     double t;
+    bool front_face;
 
-    inline void copy_rec(const hit_record &other) {
+    void copy_rec(const hit_record &other) {
         p = other.p;
         norm = other.norm;
         t = other.t;
+    }
+
+    void set_face_norm(const ray& r, const vec3& out_norm) {
+        front_face = dot(r.direction(), out_norm) < 0;
+        norm = front_face ? out_norm : -out_norm;
     }
 };
 
