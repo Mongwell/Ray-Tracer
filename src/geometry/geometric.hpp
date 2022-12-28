@@ -15,7 +15,7 @@ struct hit_record {
         t = other.t;
     }
 
-    void set_face_norm(const ray& r, const vec3& out_norm) {
+    void set_face_norm(const ray &r, const vec3 &out_norm) {
         front_face = dot(r.direction(), out_norm) < 0;
         norm = front_face ? out_norm : -out_norm;
     }

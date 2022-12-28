@@ -1,9 +1,9 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include <cmath>
 #include "common.hpp"
-#include "geometry/sphere.hpp"
 #include "geometry/geometric_list.hpp"
+#include "geometry/sphere.hpp"
 #include "stb_image_write.h"
+#include <cmath>
 #include <iostream>
 #include <string>
 
@@ -28,7 +28,7 @@ void print_progress_meter(const float progress) {
               << std::flush;
 }
 
-color ray_color(const ray &r, const geometric& scene) {
+color ray_color(const ray &r, const geometric &scene) {
     const color bg_color1(0.5, 0.7, 1.0);
     const color bg_color2(1, 1, 1);
 

@@ -6,7 +6,7 @@ bool geometric_list::intersect(const ray &r, double t_min, double t_max,
     bool hit_anything = false;
     double current_closest = t_max;
 
-    for (const shared_ptr<geometric>& e : entities) {
+    for (const shared_ptr<geometric> &e : entities) {
         if (e->intersect(r, t_min, current_closest, &current_rec)) {
             hit_anything = true;
             current_closest = current_rec.t;

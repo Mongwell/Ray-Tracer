@@ -33,6 +33,4 @@ bool sphere::intersect(const ray &r, double t_min, double t_max,
     return true;
 }
 
-vec3 sphere::out_unorm(const point3 p) const {
-    return (p - center) / radius;
-}
+vec3 sphere::out_unorm(const point3 p) const { return (p - center) / radius; }
