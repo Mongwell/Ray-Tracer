@@ -1,7 +1,9 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "ray.hpp"
+#include <cmath>
+#include "common.hpp"
+#include "geometry/sphere.hpp"
+#include "geometry/geometric_list.hpp"
 #include "stb_image_write.h"
-#include "vec3.hpp"
 #include <iostream>
 #include <string>
 
@@ -26,31 +28,17 @@ void print_progress_meter(const float progress) {
               << std::flush;
 }
 
-double hit_sphere(const point3 &center, double radius, const ray &r) {
-    // check if ray hits sphere using quadratic formula discriminant
-    vec3 c2o = r.origin() - center;
-    double a = r.direction().length_squared();
-    double half_b = dot(c2o, r.direction());
-    double c = c2o.length_squared() - radius * radius;
-    double discriminant = half_b * half_b - a * c;
-
-    if (discriminant < 0) {
-        return -1.0;
-    } else {
-        return (-half_b - std::sqrt(discriminant)) / a;
-    }
-}
-
-color ray_color(const ray &r) {
-    double t = hit_sphere(point3(0, 0, -1), 0.5, r);
-    if (t > 0.0) {
-        vec3 s_norm = unit_vector(r.at(t) - vec3(0, 0, -1));
-        return 0.5*color(s_norm + vec3(1, 1, 1));
-    }
+color ray_color(const ray &r, const geometric& scene) {
     const color bg_color1(0.5, 0.7, 1.0);
     const color bg_color2(1, 1, 1);
+
+    hit_record rec;
+    if (scene.intersect(r, 0, INFINITY, &rec)) {
+        return 0.5 * (rec.norm + color(1, 1, 1));
+    }
+
     vec3 unit_direction = unit_vector(r.direction());
-    t = 0.5 * (unit_direction.y() + 1.0);
+    double t = 0.5 * (unit_direction.y() + 1.0);
     return (1.0 - t) * bg_color2 + t * bg_color1;
 }
 
@@ -59,6 +47,11 @@ int main() {
     const double aspect_ratio = 16.0 / 9.0;
     const int image_width = 1920;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
+
+    // Scene
+    geometric_list scene;
+    scene.append(make_shared<sphere>(point3(0, 0, -1), 0.5));
+    scene.append(make_shared<sphere>(point3(0, -100.5, -1), 100));
 
     // Camera settings
     double viewport_height = 2.0;
@@ -80,7 +73,7 @@ int main() {
             point3 target = upper_left_corner + u * horizontal - v * vertical;
             ray r(origin, target - origin);
 
-            color pixel = ray_color(r);
+            color pixel = ray_color(r, scene);
             img_data[i][j] = pixel.to_pixel_color();
         }
     }
